@@ -1,0 +1,55 @@
+<html>
+<head>
+  <script src='./lib/js/fhir-client-v0.1.12.js'></script>
+  <script type="text/javascript">
+
+  function myFunction(){
+
+    const demo = {
+        serviceUrl: "https://api.hspconsortium.org/hspcdemo/open",
+        patientId: "BILIBABY"
+    };
+
+
+    const smart = FHIR.client(demo),
+        pt = smart.patient;
+
+
+    smart.patient.read().then(function(pt) {
+      displayPatient (pt);
+    });
+
+
+  function getPatientName (pt) {
+    if (pt.name) {
+      let names = pt.name.map(function(name) {
+        return name.given.join(" ") + " " + name.family.join(" ");
+      });
+      return names.join(" / ")
+    } else {
+      return "anonymous";
+    }
+  }
+
+  function displayPatient (pt) {
+    document.getElementById('patient_name').innerHTML = getPatientName(pt);
+    document.getElementById('patient_gender').innerHTML = pt.gender;
+    document.getElementById('patient_birthDate').innerHTML = pt.birthDate;
+  }
+
+}
+</script>
+
+</head>
+
+<body>
+
+<p>Click the button for Patient details.</p>
+<h2>My Name is : <span id="patient_name">...</span>!</h2>
+<h2>gender : <span id="patient_gender"></span></h2>
+<h2>D.O.B : <span id="patient_birthDate"></span></h2>
+<button onclick="myFunction()">Click me</button>
+
+</body>
+
+</html>
